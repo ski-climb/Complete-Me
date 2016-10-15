@@ -1,0 +1,4 @@
+cat
+cats
+cog
+cogs
