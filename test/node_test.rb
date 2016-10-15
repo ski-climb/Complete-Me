@@ -32,4 +32,19 @@ class NodeTest < Minitest::Test
     assert(test_node.terminator?)
   end
 
+  def test_a_node_is_initialized_with_no_children
+    test_no_children = Node.new
+    refute test_no_children.has_children?
+  end
+
+  def test_it_knows_its_own_children
+    test_has_child = Node.new
+    test_child_node = Node.new
+    test_has_child.add_child(test_child_node)
+    assert test_has_child.children.include?(test_child_node)
+  end
+
+  def test_has_children?
+    skip
+  end
 end
