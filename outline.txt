@@ -1,0 +1,27 @@
+test file:
+
+cat
+cats
+cattle
+cage
+cages
+cog
+cogs
+
+1. be able to take a file as input (empty file)
+2. be able to "complete_me.insert('pizza')"
+3. be able to parse a file (test file above); one word per line and insert them into the Trie
+4. be able to count number of words in the Trie
+  - empty first
+  - 1 word
+  - (cat, cats)
+  - (cat, cats, cattle)
+  - test file
+  - whole dictionary
+5. suggest words
+  - empty
+  - 'c' (cat)
+  - 'c' (cat, cog)
+  - 'c' (cat, cats)
+  - 'c' (cat, cats, cog, cogs)
+  - test file
