@@ -28,8 +28,8 @@ class Node
   end
 
   def find_child(letter)
-    children.find do |one_node|
-      one_node.letter == letter
+    children.find do |node|
+      node.letter == letter
     end
   end
 

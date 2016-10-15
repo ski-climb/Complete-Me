@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require './lib/node'
 
 class NodeTest < Minitest::Test
-  def test_it_exists
+  def test_node_exists
     assert(Node.new)
   end
 
