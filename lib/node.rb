@@ -1,5 +1,3 @@
-require 'pry'
-
 class Node
   attr_reader :letter,
               :children,
@@ -20,7 +18,9 @@ class Node
   end
 
   def add_child(letter)
-    @children << Node.new(letter)
+    child_node = Node.new(letter)
+    @children << child_node
+    return child_node
   end
 
   def has_child?(letter)

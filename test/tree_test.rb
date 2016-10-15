@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require './lib/tree'
 
+require 'pry'
+
 class TreeTest < Minitest::Test
 
   def test_tree_exists
@@ -25,7 +27,14 @@ class TreeTest < Minitest::Test
 
   def test_tree_count_will_return_zero_when_empty
     test_empty_tree = Tree.new
+    # binding.pry
     assert_equal 0, test_empty_tree.count
+  end
+
+  def test_tree_count_will_return_one_when_populated_with_one_leaf
+    test_one_tree = Tree.new
+    test_one_tree.insert('a')
+    assert_equal 1, test_one_tree.count
   end
 
   def test_tree_count_will_return_one_when_populated_with_one_word
@@ -38,6 +47,7 @@ class TreeTest < Minitest::Test
     test_two_tree = Tree.new
     test_two_tree.insert('cat')
     test_two_tree.insert('cats')
+    binding.pry
     assert_equal 2, test_two_tree.count
   end
 
