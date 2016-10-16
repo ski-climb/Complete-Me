@@ -19,11 +19,11 @@ class Tree
     return if letters.empty?
 
     letter = letters.shift
-    go_to_child(node, letters, letter) if node.has_child?(letter)
+    go_to_node(node, letters, letter) if node.has_child?(letter)
     make_child(node, letters, letter) unless node.has_child?(letter)
   end
 
-  def go_to_child(node, letters, letter)
+  def go_to_node(node, letters, letter)
     node.find_child(letter).set_terminator if letters.empty?
     add_to_tree(node.find_child(letter), letters)
   end
@@ -44,6 +44,23 @@ class Tree
     @word_count += 1 if node.terminator?
     node.children.each do |child|
       count_children(child)
+    end
+  end
+
+  def import(all_words)
+    separated_words = parse_string(all_words)
+    insert_words(separated_words)
+  end
+
+  def parse_string(all_words)
+    words = all_words.split("\n")
+    return words
+  end
+
+  def insert_words(words)
+    # binding.pry
+    words.each do |word|
+      insert(word)
     end
   end
 
