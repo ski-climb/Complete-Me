@@ -150,10 +150,10 @@ class TreeTest < Minitest::Test
     assert_equal [], test_no_results.suggest('jibberishlyisms')
   end
 
-  # def test_tree_returns_empty_array_when_original_word_is_longer_than_existing_words
-  #   test_no_results = Tree.new
-  #   test_no_results.insert('cat')
-  #   assert_equal [], test_no_results.suggest('cats')
-  # end
+  def test_tree_returns_empty_array_when_original_word_is_longer_than_existing_words
+    test_no_results = Tree.new
+    test_no_results.insert('cat')
+    assert_equal [], test_no_results.suggest('cats')
+  end
 
 end

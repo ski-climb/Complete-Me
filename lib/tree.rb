@@ -94,8 +94,11 @@ class Tree
   end
 
   def find_node(node = root_node, letters)
-    return node if letters.empty?
-    letter = letters.shift
+    if letters.empty? || ! node.has_children?
+      return node
+    else
+      letter = letters.shift
+    end
 
     child = node.find_child(letter)
     find_node(child, letters)
