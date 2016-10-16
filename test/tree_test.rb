@@ -169,4 +169,11 @@ class TreeTest < Minitest::Test
     test_seven.import(seven_words)
     assert_equal ['cog', 'cogs'], test_seven.suggest('co')
   end
+
+  def test_tree_can_properly_suggest_when_given_a_larger_data_set
+    test_sample = Tree.new
+    sample_words = File.read('./test/small_dictionary.txt')
+    test_sample.import(sample_words)
+    assert_equal ['underbottom', 'undextrous'], test_sample.suggest('und')
+  end
 end
