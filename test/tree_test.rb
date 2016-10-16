@@ -97,6 +97,22 @@ class TreeTest < Minitest::Test
     assert_equal 1, test_one.count
   end
 
+  def test_a_tree_inserts_several_words_from_test_file
+    test_seven = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_seven.import(seven_words)
+    assert_equal 7, test_seven.count
+  end
+
+  def test_a_tree_inserts_representative_sample_from_dictionary_file
+    test_insert_representative = Tree.new
+    small_sample = File.read('./test/small_dictionary.txt')
+    test_insert_representative.import(small_sample)
+    assert_equal 236, test_insert_representative.count
+  end
+
+
+
 
 
 end
