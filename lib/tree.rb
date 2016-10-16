@@ -1,3 +1,4 @@
+require './lib/node'
 require 'pry'
 
 class Tree
@@ -10,24 +11,49 @@ class Tree
 
   def insert(word)
     letters = word.chars
-    insert_as_letters(letters)
+    add_to_tree(letters)
+    binding.pry
     word
   end
 
-  def insert_as_letters(node = root_node, letters)
+  def add_to_tree(node = root_node, letters)
+    return if letters.empty?
+
     letter = letters.shift
-    if letter
-      if node.has_child?(letter)
-        insert_as_letters(node.find_child(letter), letters)
-      else
-        child_node = node.add_child(letter)
-        child_node.set_terminator if letters.empty?
-        insert_as_letters(child_node, letters)
-      end
-    end
+    binding.pry
+    go_to_child(node, letters, letter) if node.has_child?(letter)
+    make_child(node, letters, letter) unless node.has_child?(letter)
   end
 
+  def go_to_child(node, letters, letter)
+    # binding.pry
+    node.set_terminator if letters.empty?
+    # binding.pry
+    add_to_tree(node.find_child(letter), letters)
+  end
 
+  def make_child(node, letters, letter)
+    child_node = node.add_child(letter)
+    # binding.pry
+    child_node.set_terminator if letters.empty?
+    # binding.pry
+    add_to_tree(child_node, letters)
+  end
+
+# def add_to_tree(node = root_node, letters)
+#    return if letters.empty?
+#    letter = letters.shift
+
+#    if node.has_child?(letter)
+#      node.set_terminator if letters.empty?
+#      add_to_tree(node.find_child(letter), letters)
+   
+#    unless node.has_child?(letter)
+#      child_node = node.add_child(letter)
+#      child_node.set_terminator if letters.empty?
+#      add_to_tree(child_node, letters)
+#    end
+#  end
 
 
   def count(node = root_node)
@@ -39,7 +65,7 @@ class Tree
   def count_children(node)
     @word_count += 1 if node.terminator?
     node.children.each do |child|
-      count(child)
+      count_children(child)
     end
   end
 
