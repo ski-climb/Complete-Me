@@ -144,16 +144,29 @@ class TreeTest < Minitest::Test
     assert_equal ['cog', 'cogs'], test_two_suggestion.suggest('c')
   end
 
-  def test_tree_returns_empty_array_when_no_words_match_the_request_for_suggestion
+  def test_tree_returns_empty_array_when_no_words_match_the_original_word_for_suggestion
     test_no_results = Tree.new
     test_no_results.insert('cat')
     assert_equal [], test_no_results.suggest('jibberishlyisms')
   end
 
-  def test_tree_returns_empty_array_when_original_word_is_longer_than_existing_words
+  def test_tree_returns_empty_array_when_original_word_for_suggestion_is_longer_than_existing_words
     test_no_results = Tree.new
     test_no_results.insert('cat')
     assert_equal [], test_no_results.suggest('cats')
   end
 
+  def test_tree_suggests_proper_word_as_longer_original_word_for_suggestion_is_provided
+    test_seven = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_seven.import(seven_words)
+    assert_equal ['cage', 'cages', 'cat', 'cats', 'cattle'], test_seven.suggest('ca')
+  end
+
+  def test_tree_suggests_proper_word_as_longer_stem_word_for_suggestion_is_provided
+    test_seven = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_seven.import(seven_words)
+    assert_equal ['cog', 'cogs'], test_seven.suggest('co')
+  end
 end

@@ -80,7 +80,7 @@ class Tree
       end
     end
 
-    return suggestions
+    return suggestions.sort
   end
 
   def find_words(node, beginning_of_word)
