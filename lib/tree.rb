@@ -3,7 +3,8 @@ require 'pry'
 
 class Tree
   attr_reader :root_node,
-              :word_count
+              :word_count,
+              :suggestions
 
   def initialize
     @root_node = Node.new
@@ -64,5 +65,40 @@ class Tree
     end
   end
 
+  def suggest(stem)
+    @suggestions = []
+    letters = stem.chars
+
+    return [] unless root_node.has_child?(letters.first)
+
+    stem_node = find_node(letters)
+    beginning_of_word = stem
+
+    if stem_node.has_children?
+      stem_node.children.each do |node|
+        find_words(node, beginning_of_word)
+      end
+    end
+
+    return suggestions
+  end
+
+  def find_words(node, beginning_of_word)
+    beginning_of_word += node.letter
+    @suggestions << beginning_of_word if node.terminator?
+    if node.has_children?
+      node.children.each do |child_node|
+        find_words(child_node, beginning_of_word)
+      end
+    end
+  end
+
+  def find_node(node = root_node, letters)
+    return node if letters.empty?
+    letter = letters.shift
+
+    child = node.find_child(letter)
+    find_node(child, letters)
+  end
 
 end

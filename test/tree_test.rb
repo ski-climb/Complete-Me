@@ -114,14 +114,20 @@ class TreeTest < Minitest::Test
   def test_a_tree_suggests_a_word_when_tree_contains_one_word
     test_one_suggestion = Tree.new
     test_one_suggestion.insert('cat')
-    assert_equal 'cat', test_one_suggestion.suggest('c')
+    assert_equal ['cat'], test_one_suggestion.suggest('c')
+  end
+
+  def test_a_tree_suggests_a_word_when_given_more_than_one_letter
+    test_one_suggestion = Tree.new
+    test_one_suggestion.insert('cat')
+    assert_equal ['cat'], test_one_suggestion.suggest('ca')
   end
 
   def test_a_tree_suggests_correct_word_when_tree_contains_two_words
     test_two_suggestion = Tree.new
     test_two_suggestion.insert('cat')
     test_two_suggestion.insert('dog')
-    assert_equal 'dog', test_two_suggestion.suggest('d')
+    assert_equal ['dog'], test_two_suggestion.suggest('d')
   end
 
   def test_a_tree_suggests_two_words_when_tree_contains_two_words
@@ -131,16 +137,23 @@ class TreeTest < Minitest::Test
     assert_equal ['cat', 'cog'], test_two_suggestion.suggest('c')
   end
 
-  def tree_returns_suggested_word_even_when_word_termination_is_not_a_leaf_node
+  def test_tree_returns_suggested_word_even_when_word_termination_is_not_a_leaf_node
     test_two_suggestion = Tree.new
     test_two_suggestion.insert('cog')
     test_two_suggestion.insert('cogs')
     assert_equal ['cog', 'cogs'], test_two_suggestion.suggest('c')
-
   end
 
+  def test_tree_returns_empty_array_when_no_words_match_the_request_for_suggestion
+    test_no_results = Tree.new
+    test_no_results.insert('cat')
+    assert_equal [], test_no_results.suggest('jibberishlyisms')
+  end
 
-
-
+  # def test_tree_returns_empty_array_when_original_word_is_longer_than_existing_words
+  #   test_no_results = Tree.new
+  #   test_no_results.insert('cat')
+  #   assert_equal [], test_no_results.suggest('cats')
+  # end
 
 end
