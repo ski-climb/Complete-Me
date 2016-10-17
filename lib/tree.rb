@@ -59,41 +59,44 @@ class Tree
   end
 
   def insert_words(words)
-    # binding.pry
     words.each do |word|
       insert(word)
     end
   end
 
-  def suggest(stem)
+  def suggest(beginning_of_word)
     @suggestions = []
-    letters = stem.chars
+    letters = beginning_of_word.chars
 
     return [] unless root_node.has_child?(letters.first)
 
-    stem_node = find_node(letters)
-    beginning_of_word = stem
+    beginning_of_word_node = find_beginning_of_word_node(letters)
 
-    if stem_node.has_children?
-      stem_node.children.each do |node|
-        find_words(node, beginning_of_word)
+    return all_words_for_partial_word(beginning_of_word_node, beginning_of_word)
+  end
+
+  def all_words_for_partial_word(beginning_of_word_node, beginning_of_word)
+    if beginning_of_word_node.has_children?
+      beginning_of_word_node.children.each do |child_node|
+        find_words_of_partial_word(child_node, beginning_of_word)
       end
     end
 
     return suggestions.sort
   end
 
-  def find_words(node, beginning_of_word)
-    beginning_of_word += node.letter
-    @suggestions << beginning_of_word if node.terminator?
+  def find_words_of_partial_word(node, word_suggestion)
+    word_suggestion += node.letter
+    @suggestions << word_suggestion if node.terminator?
+
     if node.has_children?
       node.children.each do |child_node|
-        find_words(child_node, beginning_of_word)
+        find_words_of_partial_word(child_node, word_suggestion)
       end
     end
   end
 
-  def find_node(node = root_node, letters)
+  def find_beginning_of_word_node(node = root_node, letters)
     if letters.empty? || ! node.has_children?
       return node
     else
@@ -101,7 +104,7 @@ class Tree
     end
 
     child = node.find_child(letter)
-    find_node(child, letters)
+    find_beginning_of_word_node(child, letters)
   end
 
 end

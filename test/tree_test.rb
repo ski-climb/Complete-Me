@@ -144,10 +144,17 @@ class TreeTest < Minitest::Test
     assert_equal ['cog', 'cogs'], test_two_suggestion.suggest('c')
   end
 
-  def test_tree_returns_empty_array_when_no_words_match_the_original_word_for_suggestion
+  def test_tree_with_one_word_returns_no_words_when_no_words_match_the_original_word_for_suggestion
     test_no_results = Tree.new
     test_no_results.insert('cat')
     assert_equal [], test_no_results.suggest('jibberishlyisms')
+  end
+
+  def test_tree_with_seven_words_suggests_no_words_when_user_input_is_completely_different
+    test_seven = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_seven.import(seven_words)
+    assert_equal [], test_seven.suggest('tira')
   end
 
   def test_tree_returns_empty_array_when_original_word_for_suggestion_is_longer_than_existing_words
@@ -176,4 +183,5 @@ class TreeTest < Minitest::Test
     test_sample.import(sample_words)
     assert_equal ['underbottom', 'undextrous'], test_sample.suggest('und')
   end
+
 end
