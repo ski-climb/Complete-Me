@@ -108,7 +108,10 @@ class Tree
   end
 
   def select(partial_word, selected_suggestion)
-    
+    letters = partial_word.chars
+    return unless root_node.has_child?(letters.first)
+    partial_word_node = find_beginning_of_word_node(letters)
+    partial_word_node.add_selected_suggestion(selected_suggestion)
   end
 
 end

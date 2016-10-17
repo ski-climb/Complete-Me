@@ -83,19 +83,21 @@ class NodeTest < Minitest::Test
   def test_node_add_selected_suggestion_to_empty_list_of_previously_selected_suggestions
     test_add_selected_suggestion_node = Node.new
     test_add_selected_suggestion_node.add_selected_suggestion("cat")
-    assert_equal [[1, "cat"]], test_add_selected_suggestion_node.selected_suggestions
+    assert_equal [[1, "cat"]], test_add_selected_suggestion_node.list_of_selected_suggestions
   end
 
   def test_node_add_selected_suggestion_into_not_empty_list_of_previously_selected_suggestions
     test_adding_two_selected_suggestions_node = Node.new
     test_adding_two_selected_suggestions_node.add_selected_suggestion("cat")
     test_adding_two_selected_suggestions_node.add_selected_suggestion("cattle")
-    assert_equal [[1, "cat"], [1, "cattle"]], test_adding_two_selected_suggestions_node.selected_suggestions
+    assert_equal [[1, "cat"], [1, "cattle"]], test_adding_two_selected_suggestions_node.list_of_selected_suggestions
   end
 
-
   def test_node_add_selected_suggestion_with_same_word_is_already_included_in_list_of_previously_selected_suggestions
-    skip
+    test_select_suggestion_twice = Node.new
+    test_select_suggestion_twice.add_selected_suggestion("cat")  
+    test_select_suggestion_twice.add_selected_suggestion("cat")
+    assert_equal [[2, "cat"]], test_select_suggestion_twice.list_of_selected_suggestions  
   end
 
 end

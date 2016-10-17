@@ -184,10 +184,32 @@ class TreeTest < Minitest::Test
     assert_equal ['underbottom', 'undextrous'], test_sample.suggest('und')
   end
 
+  def test_tree_select_word_from_suggested_list_when_tree_is_empty
+    test_select = Tree.new
+    test_select.select("ca", "cat")
+    assert_equal [], test_select.root_node.list_of_selected_suggestions
+  end
+
   def test_tree_select_word_from_suggested_list
     test_select = Tree.new
     seven_words = File.read('./test/test_input_file6.txt')
+    test_select.import(seven_words)
     test_select.select("ca", "cat")
+  end
+
+  def test_tree_select_same_word_from_suggested_list_twice
+    test_select = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_select.import(seven_words)
+    test_select.select("ca", "cat")
+    test_select.select("ca", "cat")
+  end
+
+  def test_tree_select_partial_word_that_is_not_in_tree
+    test_select = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_select.import(seven_words)
+    test_select.select("do", "cat")
   end
 
 end
