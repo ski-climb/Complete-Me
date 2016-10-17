@@ -107,4 +107,8 @@ class Tree
     find_beginning_of_word_node(child, letters)
   end
 
+  def select(partial_word, selected_suggestion)
+    
+  end
+
 end

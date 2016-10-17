@@ -184,4 +184,10 @@ class TreeTest < Minitest::Test
     assert_equal ['underbottom', 'undextrous'], test_sample.suggest('und')
   end
 
+  def test_tree_select_word_from_suggested_list
+    test_select = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_select.select("ca", "cat")
+  end
+
 end
