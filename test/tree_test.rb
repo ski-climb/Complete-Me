@@ -209,4 +209,31 @@ class TreeTest < Minitest::Test
     assert_equal({"cat"=>2}, test_select.find_chunk_node(["c", "a"]).selected_words)
   end
 
+  def test_tree_returns_weighted_suggestion_list_for_one_word_in_tree
+    test_one_word = Tree.new
+    test_one_word.insert("cat")
+    test_one_word.select("ca", "cat")
+    assert_equal ["cat"], test_one_word.suggest('ca')
+  end
+
+  def test_tree_returns_weighted_suggestion_list_for_seven_words_in_tree
+    test_seven_words = Tree.new
+    seven_words = File.read('./test/test_input_file6.txt')
+    test_seven_words.import(seven_words)
+    test_seven_words.select("ca", "cats")
+    assert_equal ["cats", "cage", "cages", "cat", "cattle"], test_seven_words.suggest('ca')
+  end
+
+  def test_tree_returns_weighted_suggestion_list_when_more_than_one_word_has_been_selected
+    test_two_selections = Tree.new
+    test_two_selections.insert("pizza")
+    test_two_selections.insert("pizzeria")
+    test_two_selections.insert("pizzicato")
+    3.times { test_two_selections.select("piz", "pizzeria") }
+    2.times { test_two_selections.select("pi", "pizza") }
+    1.times { test_two_selections.select("pi", "pizzicato") }
+    assert_equal ["pizzeria", "pizza", "pizzicato"], test_two_selections.suggest('piz')
+    assert_equal ["pizza", "pizzicato", "pizzeria"], test_two_selections.suggest('pi')
+  end
+
 end

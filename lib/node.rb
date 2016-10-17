@@ -4,7 +4,8 @@ class Node
   attr_reader :letter,
               :children,
               :terminator,
-              :selected_words
+              :selected_words,
+              :sorted_selections
 
   def initialize(letter = "", terminator = false)
     @letter = letter
@@ -60,6 +61,15 @@ class Node
 
   def increment(word)
     @selected_words[word] += 1
+  end
+
+  def sorted_selections
+    sorted_hash = selected_words.sort_by do |words, uses|
+      uses
+    end.reverse.to_h.keys
+
+    return sorted_hash
+
   end
 
 end

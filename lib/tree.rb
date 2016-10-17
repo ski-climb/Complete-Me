@@ -4,7 +4,8 @@ require 'pry'
 class Tree
   attr_reader :root_node,
               :word_count,
-              :suggestions
+              :suggestions,
+              :weighted_suggestions
 
   def initialize
     @root_node = Node.new
@@ -66,13 +67,17 @@ class Tree
 
   def suggest(chunk)
     @suggestions = []
+    @weighted_suggestions = []
     letters = chunk.chars
 
     return [] unless root_node.has_child?(letters.first)
 
     chunk_node = find_chunk_node(letters)
 
-    return words_on_branch(chunk_node, chunk)
+    used_words = chunk_node.sorted_selections
+    words_on_branch(chunk_node, chunk)
+
+    return @weighted_suggestions = used_words | suggestions
   end
 
   def words_on_branch(chunk_node, chunk)

@@ -1,3 +1,5 @@
+require 'simplecov'
+SimpleCov.start
 require 'minitest/autorun'
 require './lib/node'
 
@@ -72,12 +74,12 @@ class NodeTest < Minitest::Test
   def test_node_is_leaf
     test_leaf_node = Node.new
     test_leaf_node.set_terminator
-    assert test_leaf_node.is_leaf?
+    assert_equal true, test_leaf_node.is_leaf?
   end
 
   def test_node_is_not_leaf
     test_leaf_node = Node.new
-    refute test_leaf_node.is_leaf?
+    assert_equal false, test_leaf_node.is_leaf?
   end
 
   def test_node_add_selected_to_empty_list_of_previously_selected_suggestions
@@ -98,6 +100,13 @@ class NodeTest < Minitest::Test
     test_select_suggestion_twice.add_selected("cat")  
     test_select_suggestion_twice.add_selected("cat")
     assert_equal({"cat" => 2}, test_select_suggestion_twice.selected_words)
+  end
+
+  def test_node_returns_sorted_selected_words
+    test_sorted_selections = Node.new
+    2.times { test_sorted_selections.add_selected("cat") }
+    4.times { test_sorted_selections.add_selected("cats") }
+    assert_equal ["cats", "cat"], test_sorted_selections.sorted_selections 
   end
 
 end
