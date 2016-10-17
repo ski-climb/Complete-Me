@@ -189,7 +189,7 @@ class TreeTest < Minitest::Test
   def test_tree_select_word_from_suggested_list_when_tree_is_empty
     test_select = Tree.new
     test_select.select("ca", "cat")
-    assert_equal [], test_select.root_node.list_of_selected_suggestions
+    assert_equal({}, test_select.root_node.selected_words)
   end
 
   def test_tree_select_word_from_suggested_list
@@ -197,6 +197,7 @@ class TreeTest < Minitest::Test
     seven_words = File.read('./test/test_input_file6.txt')
     test_select.import(seven_words)
     test_select.select("ca", "cat")
+    assert_equal({"cat"=>1}, test_select.find_chunk_node(["c", "a"]).selected_words)
   end
 
   def test_tree_select_same_word_from_suggested_list_twice
@@ -205,13 +206,7 @@ class TreeTest < Minitest::Test
     test_select.import(seven_words)
     test_select.select("ca", "cat")
     test_select.select("ca", "cat")
-  end
-
-  def test_tree_select_partial_word_that_is_not_in_tree
-    test_select = Tree.new
-    seven_words = File.read('./test/test_input_file6.txt')
-    test_select.import(seven_words)
-    test_select.select("do", "cat")
+    assert_equal({"cat"=>2}, test_select.find_chunk_node(["c", "a"]).selected_words)
   end
 
 end

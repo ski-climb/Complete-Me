@@ -4,13 +4,13 @@ class Node
   attr_reader :letter,
               :children,
               :terminator,
-              :list_of_selected_suggestions
+              :selected_words
 
   def initialize(letter = "", terminator = false)
     @letter = letter
     @terminator = terminator
     @children = []
-    @list_of_selected_suggestions = []
+    @selected_words = {}
   end
 
   def set_terminator
@@ -23,7 +23,7 @@ class Node
 
   def add_child(letter)
     child_node = Node.new(letter)
-    @children << child_node
+    children << child_node
     return child_node
   end
 
@@ -45,16 +45,21 @@ class Node
     (! has_children?) and terminator?
   end
 
-  def index_of_suggestion?(selected_suggestion)
-    list_of_selected_suggestions.find_index do |one_suggestion|
-      one_suggestion[1] == selected_suggestion
-    end
+  def add_selected(word)
+    add_new(word) unless present?(word)
+    increment(word)
   end
 
-  def add_selected_suggestion(selected_suggestion)
-    index_of_suggestion = index_of_suggestion?(selected_suggestion)
-    @list_of_selected_suggestions << [1, selected_suggestion] if index_of_suggestion.nil?
-    @list_of_selected_suggestions[index_of_suggestion][0] += 1 if ! index_of_suggestion.nil?
+  def present?(word)
+    @selected_words.has_key?(word)
+  end
+
+  def add_new(word)
+    @selected_words[word] = 0
+  end
+
+  def increment(word)
+    @selected_words[word] += 1
   end
 
 end

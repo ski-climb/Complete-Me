@@ -49,11 +49,11 @@ class Tree
   end
 
   def import(all_words)
-    separated_words = parse_string(all_words)
+    separated_words = parse(all_words)
     insert_words(separated_words)
   end
 
-  def parse_string(all_words)
+  def parse(all_words)
     words = all_words.split("\n")
     return words
   end
@@ -64,39 +64,39 @@ class Tree
     end
   end
 
-  def suggest(beginning_of_word)
+  def suggest(chunk)
     @suggestions = []
-    letters = beginning_of_word.chars
+    letters = chunk.chars
 
     return [] unless root_node.has_child?(letters.first)
 
-    beginning_of_word_node = find_beginning_of_word_node(letters)
+    chunk_node = find_chunk_node(letters)
 
-    return all_words_for_partial_word(beginning_of_word_node, beginning_of_word)
+    return words_on_branch(chunk_node, chunk)
   end
 
-  def all_words_for_partial_word(beginning_of_word_node, beginning_of_word)
-    if beginning_of_word_node.has_children?
-      beginning_of_word_node.children.each do |child_node|
-        find_words_of_partial_word(child_node, beginning_of_word)
+  def words_on_branch(chunk_node, chunk)
+    if chunk_node.has_children?
+      chunk_node.children.each do |child_node|
+        find_words_on_branch(child_node, chunk)
       end
     end
 
     return suggestions.sort
   end
 
-  def find_words_of_partial_word(node, word_suggestion)
+  def find_words_on_branch(node, word_suggestion)
     word_suggestion += node.letter
-    @suggestions << word_suggestion if node.terminator?
+    suggestions << word_suggestion if node.terminator?
 
     if node.has_children?
       node.children.each do |child_node|
-        find_words_of_partial_word(child_node, word_suggestion)
+        find_words_on_branch(child_node, word_suggestion)
       end
     end
   end
 
-  def find_beginning_of_word_node(node = root_node, letters)
+  def find_chunk_node(node = root_node, letters)
     if letters.empty? || ! node.has_children?
       return node
     else
@@ -104,14 +104,14 @@ class Tree
     end
 
     child = node.find_child(letter)
-    find_beginning_of_word_node(child, letters)
+    find_chunk_node(child, letters)
   end
 
-  def select(partial_word, selected_suggestion)
-    letters = partial_word.chars
+  def select(chunk, word)
+    letters = chunk.chars
     return unless root_node.has_child?(letters.first)
-    partial_word_node = find_beginning_of_word_node(letters)
-    partial_word_node.add_selected_suggestion(selected_suggestion)
+    chunk_node = find_chunk_node(letters)
+    chunk_node.add_selected(word)
   end
 
 end
