@@ -70,9 +70,9 @@ class Tree
     @weighted_suggestions = []
     letters = chunk.chars
 
-    return [] unless root_node.has_child?(letters.first)
 
     chunk_node = find_chunk_node(letters)
+    return [] if chunk_node.nil?
 
     used_words = chunk_node.sorted_selections
     words_on_branch(chunk_node, chunk)
@@ -102,7 +102,7 @@ class Tree
   end
 
   def find_chunk_node(node = root_node, letters)
-    if letters.empty? || ! node.has_children?
+    if letters.empty? || node.nil? || node.is_leaf? 
       return node
     else
       letter = letters.shift

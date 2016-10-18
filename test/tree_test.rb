@@ -236,4 +236,17 @@ class TreeTest < Minitest::Test
     assert_equal ["pizza", "pizzicato", "pizzeria"], test_two_selections.suggest('pi')
   end
 
+
+
+
+
+
+  def test_tree_suggest_from_tree_when_chunk_is_not_in_tree
+    test_select = Tree.new
+    test_select.insert("cat")
+    test_select.insert("cats")
+    test_select.insert("cab")
+    assert_equal [], test_select.suggest("cap")
+  end
+
 end
