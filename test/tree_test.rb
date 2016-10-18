@@ -197,7 +197,7 @@ class TreeTest < Minitest::Test
     seven_words = File.read('./test/test_input_file6.txt')
     test_select.import(seven_words)
     test_select.select("ca", "cat")
-    assert_equal({"cat"=>1}, test_select.find_chunk_node(["c", "a"]).selected_words)
+    assert_equal({"cat"=>1}, test_select.find_stub_node(["c", "a"]).selected_words)
   end
 
   def test_tree_select_same_word_from_suggested_list_twice
@@ -206,7 +206,7 @@ class TreeTest < Minitest::Test
     test_select.import(seven_words)
     test_select.select("ca", "cat")
     test_select.select("ca", "cat")
-    assert_equal({"cat"=>2}, test_select.find_chunk_node(["c", "a"]).selected_words)
+    assert_equal({"cat"=>2}, test_select.find_stub_node(["c", "a"]).selected_words)
   end
 
   def test_tree_returns_weighted_suggestion_list_for_one_word_in_tree
@@ -236,12 +236,7 @@ class TreeTest < Minitest::Test
     assert_equal ["pizza", "pizzicato", "pizzeria"], test_two_selections.suggest('pi')
   end
 
-
-
-
-
-
-  def test_tree_suggest_from_tree_when_chunk_is_not_in_tree
+  def test_tree_suggest_from_tree_when_stub_is_not_in_tree
     test_select = Tree.new
     test_select.insert("cat")
     test_select.insert("cats")

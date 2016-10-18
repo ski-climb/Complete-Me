@@ -12,9 +12,12 @@ class Tree
   end
 
   def insert(word)
-    letters = word.chars
-    add_to_tree(letters)
+    add_to_tree(atomize(word))
     word
+  end
+
+  def atomize(word)
+    word.chars
   end
 
   def add_to_tree(node = root_node, letters)
@@ -75,27 +78,26 @@ class Tree
     @weighted_suggestions = []
   end
 
-  def suggest(chunk)
+  def suggest(stub)
     clean_suggestions
-    letters = chunk.chars
 
-    chunk_node = find_chunk_node(letters)
-    return [] if chunk_node.nil?
+    stub_node = find_stub_node(atomize(stub))
+    return [] if stub_node.nil?
 
-    used_words = chunk_node.sorted_selections
-    words_on_branch(chunk_node, chunk)
+    used_words = stub_node.sorted_selections
+    words_on_branch(stub_node, stub)
 
     return @weighted_suggestions = used_words | suggestions
   end
 
-  def words_on_branch(chunk_node, chunk)
-    assemble_word(chunk_node,chunk) if chunk_node.has_children?
+  def words_on_branch(stub_node, stub)
+    assemble_word(stub_node,stub) if stub_node.has_children?
     return suggestions.sort
   end
 
-  def assemble_word(chunk_node, chunk)
-    chunk_node.children.each do |child_node|
-      find_words_on_branch(child_node, chunk)
+  def assemble_word(stub_node, stub)
+    stub_node.children.each do |child_node|
+      find_words_on_branch(child_node, stub)
     end
   end
 
@@ -113,22 +115,25 @@ class Tree
     end
   end
 
-  def find_chunk_node(node = root_node, letters)
-    return node if done_chunking?(node, letters)
+  def find_stub_node(node = root_node, letters)
+    return node if done_stubing?(node, letters)
     letter = letters.shift
     child = node.find_child(letter)
-    find_chunk_node(child, letters)
+    find_stub_node(child, letters)
   end
 
-  def done_chunking?(node, letters)
+  def done_stubing?(node, letters)
     letters.empty? || node.nil? || node.is_leaf? 
   end
 
-  def select(chunk, word)
-    letters = chunk.chars
+  def select(stub, word)
+    letters = atomize(stub)
     return unless root_node.has_child?(letters.first)
-    chunk_node = find_chunk_node(letters)
-    chunk_node.add_selected(word)
+    stub_node = find_stub_node(letters)
+    stub_node.add_selected(word)
   end
+
+
+  
 
 end
