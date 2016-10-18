@@ -91,11 +91,12 @@ class Tree
   end
 
   def words_on_branch(stub_node, stub)
-    assemble_word(stub_node,stub) if stub_node.has_children?
+    assemble_word(stub_node, stub) if stub_node.has_children?
     return suggestions.sort
   end
 
   def assemble_word(stub_node, stub)
+    suggestions << stub if stub_node.terminator?
     stub_node.children.each do |child_node|
       find_words_on_branch(child_node, stub)
     end
@@ -128,9 +129,17 @@ class Tree
 
   def select(stub, word)
     letters = atomize(stub)
-    return unless root_node.has_child?(letters.first)
+    return if invalid_word(word, stub) || invalid_stub(letters)
     stub_node = find_stub_node(letters)
     stub_node.add_selected(word)
+  end
+
+  def invalid_word(word, stub)
+    !word.start_with?(stub)
+  end
+
+  def invalid_stub(letters)
+    !root_node.has_child?(letters.first)
   end
 
 

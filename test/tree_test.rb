@@ -192,6 +192,23 @@ class TreeTest < Minitest::Test
     assert_equal({}, test_select.root_node.selected_words)
   end
 
+  def test_tree_is_not_influenced_by_selecting_words_which_do_not_exist_in_tree
+    test_select = Tree.new
+    test_select.insert("cat")
+    test_select.select("ca", "boogers")
+    assert_equal ["cat"], test_select.suggest("ca")
+    # does 'boogers' exist in the dictionary?
+  end
+
+  def test_selected_word_is_along_same_branch_as_stub
+    test_select = Tree.new
+    test_select.insert("cat")
+    test_select.insert("boogers")
+    test_select.select("ca", "boogers")
+    assert_equal ["cat"], test_select.suggest("ca")
+    # is 'ca' a substring of 'boogers'
+  end
+
   def test_tree_select_word_from_suggested_list
     test_select = Tree.new
     seven_words = File.read('./test/test_input_file6.txt')
@@ -222,6 +239,16 @@ class TreeTest < Minitest::Test
     test_seven_words.import(seven_words)
     test_seven_words.select("ca", "cats")
     assert_equal ["cats", "cage", "cages", "cat", "cattle"], test_seven_words.suggest('ca')
+  end
+
+  def test_selecting_a_word_only_influences_word_suggestions_for_that_substring_and_not_related_or_longer_but_similar_substrings
+    test_ten_words = Tree.new
+    ten_words = File.read('./test/test_input_file7.txt')
+    test_ten_words.import(ten_words)
+    2.times { test_ten_words.select("ca", "cats") }
+    3.times { test_ten_words.select("cat", "cattle") }
+    assert_equal ["cats", "cage", "cages", "cat", "caterwaul", "caterwauled", "caterwauling", "cattle"], test_ten_words.suggest('ca')
+    assert_equal ["cattle", "cat", "caterwaul", "caterwauled", "caterwauling", "cats"], test_ten_words.suggest('cat')
   end
 
   def test_tree_returns_weighted_suggestion_list_when_more_than_one_word_has_been_selected
