@@ -4,8 +4,7 @@ class Node
   attr_reader :letter,
               :children,
               :terminator,
-              :selected_words,
-              :sorted_selections
+              :selected_words
 
   def initialize(letter = "", terminator = false)
     @letter = letter
