@@ -3,8 +3,6 @@ SimpleCov.start
 require 'minitest/autorun'
 require './lib/tree'
 
-require 'pry'
-
 class TreeTest < Minitest::Test
 
   def test_tree_exists
@@ -86,7 +84,6 @@ class TreeTest < Minitest::Test
 
   def test_a_tree_inserts_zero_words_when_given_empty_file
     test_empty = Tree.new
-    # binding.pry
     file_no_words = File.read('./test/empty_file.txt')
     test_empty.import(file_no_words)
     assert_equal 0, test_empty.count

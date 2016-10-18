@@ -1,5 +1,4 @@
 require './lib/node'
-require 'pry'
 
 class Tree
   attr_reader :root_node,
@@ -80,14 +79,16 @@ class Tree
 
   def suggest(stub)
     clean_suggestions
-
     stub_node = find_stub_node(atomize(stub))
     return [] if stub_node.nil?
+    gather_suggestions(stub_node, stub)
+    return weighted_suggestions
+  end
 
+  def gather_suggestions(stub_node, stub)
     used_words = stub_node.sorted_selections
     words_on_branch(stub_node, stub)
-
-    return @weighted_suggestions = used_words | suggestions
+    @weighted_suggestions = used_words | suggestions
   end
 
   def words_on_branch(stub_node, stub)
@@ -96,23 +97,25 @@ class Tree
   end
 
   def assemble_word(stub_node, stub)
-    suggestions << stub if stub_node.terminator?
+    suggestions << stub if stub_is_word?(stub_node)
     stub_node.children.each do |child_node|
       find_words_on_branch(child_node, stub)
     end
   end
 
+  def stub_is_word?(stub_node)
+    stub_node.terminator?
+  end
+
   def find_words_on_branch(node, word_suggestion)
     word_suggestion += node.letter
     suggestions << word_suggestion if node.terminator?
-    continue_find(node, word_suggestion)
+    continue_find(node, word_suggestion) if node.has_children?
   end
 
   def continue_find(node, word_suggestion)
-    if node.has_children?
-      node.children.each do |child_node|
-        find_words_on_branch(child_node, word_suggestion)
-      end
+    node.children.each do |child_node|
+      find_words_on_branch(child_node, word_suggestion)
     end
   end
 
@@ -141,8 +144,4 @@ class Tree
   def invalid_stub(letters)
     !root_node.has_child?(letters.first)
   end
-
-
-  
-
 end

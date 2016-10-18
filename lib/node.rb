@@ -1,5 +1,3 @@
-require 'pry'
-
 class Node
   attr_reader :letter,
               :children,
@@ -64,7 +62,6 @@ class Node
 
   def sorted_selections
     sorted_hash = selected_words.sort_by{ |k, v| v }.reverse.to_h.keys
-
     return sorted_hash
   end
 
