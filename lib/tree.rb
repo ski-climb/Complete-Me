@@ -19,7 +19,6 @@ class Tree
 
   def add_to_tree(node = root_node, letters)
     return if letters.empty?
-
     letter = letters.shift
     go_to_node(node, letters, letter) if node.has_child?(letter)
     make_child(node, letters, letter) unless node.has_child?(letter)
@@ -27,7 +26,6 @@ class Tree
 
   def go_to_node(node, letters, letter)
     terminate_word(node, letter) if letters.empty?
-
     child = node.find_child(letter)
     add_to_tree(child, letters)
   end
@@ -70,10 +68,6 @@ class Tree
 
   def insert_words(words)
     words.each { |word| insert(word) }
-
-    words.each do |word|
-      insert(word)
-    end
   end
 
   def clean_suggestions
@@ -108,7 +102,10 @@ class Tree
   def find_words_on_branch(node, word_suggestion)
     word_suggestion += node.letter
     suggestions << word_suggestion if node.terminator?
+    continue_find(node, word_suggestion)
+  end
 
+  def continue_find(node, word_suggestion)
     if node.has_children?
       node.children.each do |child_node|
         find_words_on_branch(child_node, word_suggestion)
@@ -117,14 +114,14 @@ class Tree
   end
 
   def find_chunk_node(node = root_node, letters)
-    if letters.empty? || node.nil? || node.is_leaf? 
-      return node
-    else
-      letter = letters.shift
-    end
-
+    return node if done_chunking?(node, letters)
+    letter = letters.shift
     child = node.find_child(letter)
     find_chunk_node(child, letters)
+  end
+
+  def done_chunking?(node, letters)
+    letters.empty? || node.nil? || node.is_leaf? 
   end
 
   def select(chunk, word)
