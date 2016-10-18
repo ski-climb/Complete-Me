@@ -62,7 +62,7 @@ class CompleteMeTest < Minitest::Test
     assert_equal ['pizza', 'pizzicato', 'pizzeria'], completion.suggest('pi')
   end
 
-    def test_suggest_and_select_with_whole_dictionary
+  def test_suggest_and_select_with_whole_dictionary
     skip
     completion = CompleteMe.new
     dictionary = File.read("/usr/share/dict/words")

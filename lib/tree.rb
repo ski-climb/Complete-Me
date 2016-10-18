@@ -76,9 +76,13 @@ class Tree
     end
   end
 
-  def suggest(chunk)
+  def clean_suggestions
     @suggestions = []
     @weighted_suggestions = []
+  end
+
+  def suggest(chunk)
+    clean_suggestions
     letters = chunk.chars
 
     chunk_node = find_chunk_node(letters)
