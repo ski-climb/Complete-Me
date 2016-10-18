@@ -144,4 +144,26 @@ class Tree
   def invalid_stub(letters)
     !root_node.has_child?(letters.first)
   end
+  def as_json
+    json_data = []
+    nodes = print_branch(root_node, json_data)
+    return json_data
+  end
+
+  def print_branch(node, json_data)
+    hash = { name: "", parent: "null" } if node == root_node
+    if node.has_children?
+      node.children.each do |child_node|
+        hash[:children] = [
+          {
+            name: child_node.letter,
+            parent: node.letter,
+            children: print_branch(child_node, json_data)
+          }
+        ]
+      end
+    end
+    json_data << hash
+  end
+
 end

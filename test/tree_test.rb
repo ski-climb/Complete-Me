@@ -194,7 +194,6 @@ class TreeTest < Minitest::Test
     test_select.insert("cat")
     test_select.select("ca", "boogers")
     assert_equal ["cat"], test_select.suggest("ca")
-    # does 'boogers' exist in the dictionary?
   end
 
   def test_selected_word_is_along_same_branch_as_stub
@@ -203,7 +202,6 @@ class TreeTest < Minitest::Test
     test_select.insert("boogers")
     test_select.select("ca", "boogers")
     assert_equal ["cat"], test_select.suggest("ca")
-    # is 'ca' a substring of 'boogers'
   end
 
   def test_tree_select_word_from_suggested_list
@@ -266,6 +264,64 @@ class TreeTest < Minitest::Test
     test_select.insert("cats")
     test_select.insert("cab")
     assert_equal [], test_select.suggest("cap")
+
+  def test_tree_can_output_root_node_as_json
+    tree = Tree.new
+    json_version = [
+      {
+        "name": "",
+        "parent": "null"
+      }
+    ];
+    assert_equal json_version, tree.as_json
+  end
+
+  def test_tree_can_output_the_first_child_of_root_node_as_json
+    tree = Tree.new
+    tree.insert('c')
+    json_version = [
+      {
+        "name": "",
+        "parent": "null",
+        "children": [
+          {
+            "name": "c",
+            "parent": ""
+          }
+        ]
+      }
+    ];
+    assert_equal json_version, tree.as_json
+  end
+
+  def test_tree_can_output_three_consecutive_children_of_root_node_as_json
+    tree = Tree.new
+    tree.insert('cat')
+    json_version = [
+      {
+        "name": "",
+        "parent": "null",
+        "children": [
+          {
+            "name": "c",
+            "parent": "",
+            "children": [ 
+              {
+                "name": "a",
+                "parent": "c",
+                "children": [
+                  {
+                    "name": "t",
+                    "parent": "a"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ];
+    assert_equal json_version, tree.as_json
   end
 
 end
