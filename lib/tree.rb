@@ -66,7 +66,7 @@ class Tree
   end
 
   def parse(all_words)
-    words = all_words.split("\n")
+    all_words.split("\n")
   end
 
   def insert_words(words)
