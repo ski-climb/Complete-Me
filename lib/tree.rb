@@ -26,8 +26,14 @@ class Tree
   end
 
   def go_to_node(node, letters, letter)
-    node.find_child(letter).set_terminator if letters.empty?
-    add_to_tree(node.find_child(letter), letters)
+    terminate_word(node, letter) if letters.empty?
+
+    child = node.find_child(letter)
+    add_to_tree(child, letters)
+  end
+
+  def terminate_word(node, letter)
+    node.find_child(letter).set_terminator
   end
 
   def make_child(node, letters, letter)
@@ -39,11 +45,15 @@ class Tree
   def count(node = root_node)
     @word_count = 0
     count_children(node)
-    word_count
+    return word_count
   end
 
   def count_children(node)
     @word_count += 1 if node.terminator?
+    continue_count(node)
+  end
+
+  def continue_count(node)
     node.children.each do |child|
       count_children(child)
     end
@@ -56,10 +66,11 @@ class Tree
 
   def parse(all_words)
     words = all_words.split("\n")
-    return words
   end
 
   def insert_words(words)
+    words.each { |word| insert(word) }
+
     words.each do |word|
       insert(word)
     end
@@ -69,7 +80,6 @@ class Tree
     @suggestions = []
     @weighted_suggestions = []
     letters = chunk.chars
-
 
     chunk_node = find_chunk_node(letters)
     return [] if chunk_node.nil?
@@ -81,13 +91,14 @@ class Tree
   end
 
   def words_on_branch(chunk_node, chunk)
-    if chunk_node.has_children?
-      chunk_node.children.each do |child_node|
-        find_words_on_branch(child_node, chunk)
-      end
-    end
-
+    assemble_word(chunk_node,chunk) if chunk_node.has_children?
     return suggestions.sort
+  end
+
+  def assemble_word(chunk_node, chunk)
+    chunk_node.children.each do |child_node|
+      find_words_on_branch(child_node, chunk)
+    end
   end
 
   def find_words_on_branch(node, word_suggestion)
