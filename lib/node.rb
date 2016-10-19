@@ -61,8 +61,8 @@ class Node
   end
 
   def sorted_selections
-    sorted_hash = selected_words.sort_by{ |k, v| v }.reverse.to_h.keys
-    return sorted_hash
+    sorted = selected_words.sort_by{ |k, v| v }.reverse.to_h.keys
+    return sorted
   end
 
 end

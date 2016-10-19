@@ -1,5 +1,7 @@
 require './lib/node'
 
+require 'pry'
+
 class Tree
   attr_reader :root_node,
               :word_count,
@@ -78,6 +80,7 @@ class Tree
   end
 
   def suggest(stub)
+    return [] if invalid_stub?(atomize(stub))
     clean_suggestions
     stub_node = find_stub_node(atomize(stub))
     return [] if stub_node.nil?
@@ -92,6 +95,7 @@ class Tree
   end
 
   def words_on_branch(stub_node, stub)
+    suggestions << stub if stub_node.is_leaf?
     assemble_word(stub_node, stub) if stub_node.has_children?
     return suggestions.sort
   end
@@ -127,21 +131,21 @@ class Tree
   end
 
   def done_stubing?(node, letters)
-    letters.empty? || node.nil? || node.is_leaf? 
+    letters.empty? || node.is_leaf? 
   end
 
   def select(stub, word)
     letters = atomize(stub)
-    return if invalid_word(word, stub) || invalid_stub(letters)
+    return if invalid_word?(word, stub) || invalid_stub?(letters)
     stub_node = find_stub_node(letters)
     stub_node.add_selected(word)
   end
 
-  def invalid_word(word, stub)
+  def invalid_word?(word, stub)
     !word.start_with?(stub)
   end
 
-  def invalid_stub(letters)
+  def invalid_stub?(letters)
     !root_node.has_child?(letters.first)
   end
 end

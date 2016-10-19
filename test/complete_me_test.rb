@@ -35,6 +35,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_it_can_import_a_whole_dictionary_of_words_at_once
+    skip
     completion = CompleteMe.new
     dictionary = File.read("/usr/share/dict/words")
     completion.populate(dictionary)
@@ -42,6 +43,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_it_can_suggest_a_word_when_whole_dictionary_is_in_the_tree
+    skip
     completion = CompleteMe.new
     dictionary = File.read("/usr/share/dict/words")
     completion.populate(dictionary)
@@ -61,6 +63,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_suggest_and_select_with_whole_dictionary
+    skip
     completion = CompleteMe.new
     dictionary = File.read("/usr/share/dict/words")
     completion.populate(dictionary)
@@ -70,5 +73,20 @@ class CompleteMeTest < Minitest::Test
     completion.select("pi", "pizzicato")
     assert_equal [], completion.suggest('magy')
   end
+
+  def test_tree_suggest_from_tree_when_stub_is_an_actual_word
+    test_select = CompleteMe.new
+    test_select.insert("cat")
+    test_select.insert("cats")
+    test_select.insert("cab")
+    assert_equal ["cat", "cats"], test_select.suggest("cat")
+  end
+
+  def test_tree_suggest_from_tree_with_one_word_when_stub_is_an_actual_word_shortly_word_ends_with_leaf
+    test_select = CompleteMe.new
+    test_select.insert("cat")
+    assert_equal ["cat"], test_select.suggest("cat")
+  end
+
 
 end
