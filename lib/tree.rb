@@ -1,7 +1,5 @@
 require './lib/node'
 
-require 'pry'
-
 class Tree
   attr_reader :root_node,
               :word_count,
@@ -124,13 +122,13 @@ class Tree
   end
 
   def find_stub_node(node = root_node, letters)
-    return node if done_stubing?(node, letters)
+    return node if done_stubbing?(node, letters) && letters.empty?
     letter = letters.shift
     child = node.find_child(letter)
     find_stub_node(child, letters)
   end
 
-  def done_stubing?(node, letters)
+  def done_stubbing?(node, letters)
     letters.empty? || node.is_leaf? 
   end
 
