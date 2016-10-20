@@ -1,4 +1,7 @@
 require './lib/node'
+require 'json'
+
+require 'pry'
 
 class Tree
   attr_reader :root_node,
@@ -144,26 +147,35 @@ class Tree
   def invalid_stub(letters)
     !root_node.has_child?(letters.first)
   end
-  def as_json
-    json_data = []
-    nodes = print_branch(root_node, json_data)
-    return json_data
+
+  def branch_as_json(node)
+    name_letter = node == root_node ? "Root Node" : node.letter
+    parent_letter = "null"
+    kiddos = node.has_children? ? get_kiddos(node, node.children) : ""
+    result = [{
+      "name": name_letter,
+      "parent": parent_letter,
+      "children": kiddos
+    }]
+    result = result.to_s
+    remove_colon = result.gsub(/:([a-z]*)/, '"\1"')
+    remove_rocket = remove_colon.gsub('=>', ': ')
+    return remove_rocket
   end
 
-  def print_branch(node, json_data)
-    hash = { name: "", parent: "null" } if node == root_node
-    if node.has_children?
-      node.children.each do |child_node|
-        hash[:children] = [
-          {
-            name: child_node.letter,
-            parent: node.letter,
-            children: print_branch(child_node, json_data)
-          }
-        ]
-      end
+  def get_kiddos(parent, all_children)
+    # binding.pry
+    all_children.map do |node|
+      kiddos = node.has_children? ? get_kiddos(node, node.children) : ""
+      {
+        "name": node.letter,
+        "parent": parent == root_node ? "Root Node" : parent.letter,
+        "children": kiddos
+      }
     end
-    json_data << hash
   end
+
+
+
 
 end
