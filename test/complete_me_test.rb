@@ -35,7 +35,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_it_can_import_a_whole_dictionary_of_words_at_once
-    # skip
+    skip
     completion = CompleteMe.new
     dictionary = File.read("/usr/share/dict/words")
     completion.populate(dictionary)
@@ -43,7 +43,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_it_can_suggest_a_word_when_whole_dictionary_is_in_the_tree
-    # skip
+    skip
     completion = CompleteMe.new
     dictionary = File.read("/usr/share/dict/words")
     completion.populate(dictionary)
@@ -63,7 +63,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_suggest_and_select_with_whole_dictionary
-    # skip
+    skip
     completion = CompleteMe.new
     dictionary = File.read("/usr/share/dict/words")
     completion.populate(dictionary)

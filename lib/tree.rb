@@ -1,4 +1,4 @@
-require './lib/node'
+require 'node'
 
 class Tree
   attr_reader :root_node,

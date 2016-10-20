@@ -87,7 +87,6 @@ Shoes.app do
                 @suggestion_list.items = []
                 if @input_box.text != ""
                     @suggestion_list.items = complete_me.suggest(@input_box.text)
-                    para complete_me.suggest(@input_box.text)
                 end
             }
         end

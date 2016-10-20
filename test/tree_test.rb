@@ -280,4 +280,13 @@ class TreeTest < Minitest::Test
     assert_equal ["cat"], test_select.suggest("cat")
   end
 
+
+
+  # def test_creating_json
+  #   json_test = Tree.new
+  #   json_test.insert('cat')
+  #   json_test.insert('cab')
+  #   assert_equal ['pizza'], json_test.build_json
+  # end
+
 end
